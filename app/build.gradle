@@ -1,0 +1,69 @@
+apply plugin: 'com.android.application'     // Android应用
+apply plugin: 'me.tatarka.retrolambda'      // Lambda表达式
+apply plugin: 'com.neenbedankt.android-apt' // 编译时类
+apply plugin: 'com.android.databinding'     // 数据绑定
+
+def libs = rootProject.ext.libraries // 库
+
+android {
+    compileSdkVersion 'Google Inc.:Google APIs:23'
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "me.chunyu.spike.springrainnews"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        buildConfigField "String", "MARVEL_PUBLIC_KEY", "\"${marvel_public_key}\""
+        buildConfigField "String", "MARVEL_PRIVATE_KEY", "\"${marvel_private_key}\""
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // 注释冲突
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    // Android
+    compile "com.android.support:design:${libs.supportVersion}"
+    compile "com.android.support:appcompat-v7:${libs.supportVersion}"
+    compile "com.android.support:cardview-v7:${libs.supportVersion}"
+    compile "com.android.support:recyclerview-v7:${libs.supportVersion}"
+    compile "com.android.support:palette-v7:${libs.supportVersion}"
+
+    // Retrofit
+    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+
+    // ReactiveX
+    compile "io.reactivex:rxjava:${libs.rxandroid}"
+    compile "io.reactivex:rxandroid:${libs.rxandroid}"
+
+    // Dagger
+    compile "com.google.dagger:dagger:${libs.dagger}"
+    apt "com.google.dagger:dagger-compiler:${libs.dagger}"
+    compile "org.glassfish:javax.annotation:${libs.javax_annotation}"
+
+    // Others
+    compile "com.jakewharton:butterknife:${libs.butterknife}" // 资源注入
+    compile "com.github.bumptech.glide:glide:${libs.glide}" // 图片处理
+    compile "jp.wasabeef:recyclerview-animators:${libs.recycler_animators}" // Recycler动画
+    compile "de.hdodenhof:circleimageview:${libs.circleimageview}" // 头像视图
+}
