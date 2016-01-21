@@ -1,5 +1,6 @@
 package me.chunyu.spike.springrainnews.uis.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,22 +10,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.chunyu.spike.springrainnews.NewsApplication;
 import me.chunyu.spike.springrainnews.R;
 import me.chunyu.spike.springrainnews.mvp.models.AvengersCharacter;
+import me.chunyu.spike.springrainnews.mvp.presenters.MainPresenter;
 import me.chunyu.spike.springrainnews.mvp.views.MainView;
-import me.chunyu.spike.springrainnews.networks.RestDataSource;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
@@ -35,51 +35,31 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Bind(R.id.nav_view) NavigationView mNavView;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
 
+    @Inject MainPresenter mMainPresenter;
+    @Inject Context mAppContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUi(); // 初始化Ui
         initDi(); // 初始化依赖注入
         initDefault(); // 默认配置
-
-        RestDataSource rds = new RestDataSource();
-        rds.getCharacters(0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<AvengersCharacter>>() {
-                    @Override public void call(List<AvengersCharacter> avengersCharacters) {
-                        Log.e(TAG, "size: " + avengersCharacters.size());
-                    }
-                });
+        initPresenter(); // 初始化展示
     }
 
-    // 初始化Ui
-    private void initUi() {
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+    @Override protected void onResume() {
+        super.onResume();
+        mMainPresenter.onResume();
     }
 
-    // 初始化依赖注入
-    private void initDi() {
-        NewsApplication.component().inject(this); // 注入
+    @Override protected void onStop() {
+        super.onStop();
+        mMainPresenter.onStop();
     }
 
-    // 初始化默认配置
-    private void initDefault() {
-        setSupportActionBar(mToolbar);
-
-        mFab.setOnClickListener(view ->
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
-        );
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
-        toggle.syncState();
-
-        mNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        mMainPresenter.onDestroy();
     }
 
     @Override
@@ -136,5 +116,44 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override public void setListData(List<AvengersCharacter> characters) {
+        Toast.makeText(mAppContext, "数量: " + characters.size(), Toast.LENGTH_SHORT).show();
+    }
+
+    // 初始化Ui
+    private void initUi() {
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+    }
+
+    // 初始化依赖注入
+    private void initDi() {
+        NewsApplication.component().inject(this); // 注入
+    }
+
+    // 初始化默认配置
+    private void initDefault() {
+        setSupportActionBar(mToolbar);
+
+        mFab.setOnClickListener(view ->
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show()
+        );
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
+
+        mNavView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+    }
+
+    // 初始化展示
+    private void initPresenter() {
+        mMainPresenter.attachView(this);
+        mMainPresenter.onCreate();
     }
 }
