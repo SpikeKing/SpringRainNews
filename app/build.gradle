@@ -48,9 +48,10 @@ dependencies {
     compile "com.android.support:palette-v7:${libs.supportVersion}"
 
     // Retrofit
-    compile "com.squareup.retrofit:retrofit:${libs.retrofit}"
-    compile "com.squareup.retrofit:converter-gson:${libs.retrofit}"
-    compile "com.squareup.retrofit:adapter-rxjava:${libs.retrofit}"
+    compile "com.squareup.retrofit2:retrofit:${libs.retrofit}"
+    compile "com.squareup.retrofit2:converter-gson:${libs.retrofit}"
+    compile "com.squareup.retrofit2:adapter-rxjava:${libs.retrofit}"
+    compile "com.squareup.okhttp3:logging-interceptor:${libs.okhttp}"
 
     // ReactiveX
     compile "io.reactivex:rxjava:${libs.rxandroid}"

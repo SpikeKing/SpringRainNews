@@ -9,17 +9,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.chunyu.spike.springrainnews.NewsApplication;
 import me.chunyu.spike.springrainnews.R;
+import me.chunyu.spike.springrainnews.mvp.models.AvengersCharacter;
 import me.chunyu.spike.springrainnews.mvp.views.MainView;
+import me.chunyu.spike.springrainnews.networks.RestDataSource;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainView {
+
+    private static final String TAG = "DEBUG-WCL: " + MainActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.fab) FloatingActionButton mFab;
@@ -32,6 +41,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
         initUi(); // 初始化Ui
         initDi(); // 初始化依赖注入
         initDefault(); // 默认配置
+
+        RestDataSource rds = new RestDataSource();
+        rds.getCharacters(0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<List<AvengersCharacter>>() {
+                    @Override public void call(List<AvengersCharacter> avengersCharacters) {
+                        Log.e(TAG, "size: " + avengersCharacters.size());
+                    }
+                });
     }
 
     // 初始化Ui
