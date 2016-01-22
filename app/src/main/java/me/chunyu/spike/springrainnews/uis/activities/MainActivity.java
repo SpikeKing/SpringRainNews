@@ -9,6 +9,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,23 +27,29 @@ import me.chunyu.spike.springrainnews.R;
 import me.chunyu.spike.springrainnews.mvp.models.AvengersCharacter;
 import me.chunyu.spike.springrainnews.mvp.presenters.MainPresenter;
 import me.chunyu.spike.springrainnews.mvp.views.MainView;
+import me.chunyu.spike.springrainnews.uis.adapters.MainListAdapter;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private static final String TAG = "DEBUG-WCL: " + MainActivity.class.getSimpleName();
+
+    @Inject MainPresenter mMainPresenter;
+    @Inject Context mAppContext;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.fab) FloatingActionButton mFab;
     @Bind(R.id.nav_view) NavigationView mNavView;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawerLayout;
 
-    @Inject MainPresenter mMainPresenter;
-    @Inject Context mAppContext;
+    @Bind(R.id.main_rv_list) RecyclerView mRvList; // 列表视图
+
+    private MainListAdapter mListAdapter; // 列表视图的适配器
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initUi(); // 初始化Ui
+        initList();
         initDi(); // 初始化依赖注入
         initDefault(); // 默认配置
         initPresenter(); // 初始化展示
@@ -120,12 +128,20 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override public void setListData(List<AvengersCharacter> characters) {
         Toast.makeText(mAppContext, "数量: " + characters.size(), Toast.LENGTH_SHORT).show();
+        mListAdapter.setCharacters(characters);
     }
 
     // 初始化Ui
     private void initUi() {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+    }
+
+    // 初始化列表
+    private void initList() {
+        mRvList.setLayoutManager(new LinearLayoutManager(mAppContext));
+        mListAdapter = new MainListAdapter();
+        mRvList.setAdapter(mListAdapter);
     }
 
     // 初始化依赖注入

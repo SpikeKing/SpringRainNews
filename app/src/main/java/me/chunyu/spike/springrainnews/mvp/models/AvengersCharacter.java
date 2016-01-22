@@ -5,6 +5,7 @@ package me.chunyu.spike.springrainnews.mvp.models;
  * <p>
  * Created by wangchenlong on 16/1/21.
  */
+@SuppressWarnings("unused")
 public class AvengersCharacter {
 
     private int id;
@@ -42,6 +43,11 @@ public class AvengersCharacter {
 
     public ThumbnailEntity getThumbnail() {
         return thumbnail;
+    }
+
+    // 返回图片路径
+    public String getThumbImage() {
+        return String.format("%s.%s", thumbnail.path, thumbnail.extension);
     }
 
     public static class ThumbnailEntity {
