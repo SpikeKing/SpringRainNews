@@ -77,6 +77,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListAdapter.MainLi
         public void bindTo(AvengersCharacter character) {
             Glide.with(mAppContext)
                     .load(character.getThumbImage())
+                    .placeholder(R.drawable.image_not_available)
                     .crossFade()
                     .into(mIvAvengerThumb);
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,28 +12,24 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="2dp">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/ml_item_iv_avenger_thumb"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:background="@color/black"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"/>
 
-        <ImageView
-            android:id="@+id/ml_item_iv_avenger_thumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:background="@color/black"
-            android:scaleType="centerCrop"/>
-
-        <TextView
-            android:id="@+id/ml_item_tv_avenger_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            tools:text="An amazing avenger"/>
-    </FrameLayout>
+    <TextView
+        android:id="@+id/ml_item_tv_avenger_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        tools:text="An amazing avenger"/>
 
 </android.support.v7.widget.CardView>
