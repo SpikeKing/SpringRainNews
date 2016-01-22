@@ -1,7 +1,5 @@
 package me.chunyu.spike.springrainnews.mvp.presenters;
 
-import android.util.Log;
-
 import javax.inject.Inject;
 
 import me.chunyu.spike.springrainnews.mvp.models.Repository;
@@ -18,7 +16,7 @@ import rx.schedulers.Schedulers;
  */
 public class MainPresenter implements BasePresenter {
 
-    private Repository mRepository; // 网络库
+    private final Repository mRepository; // 网络库
 
     private MainView mMainView; // 主页
 

@@ -1,8 +1,3 @@
-/*
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- */
 package me.chunyu.spike.springrainnews.networks;
 
 import com.google.gson.Gson;
@@ -26,6 +21,11 @@ import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
 
+/**
+ * 数据源
+ *
+ * @author wangchenlong
+ */
 public class RestDataSource implements Repository {
 
     private final MarvelService mMarvelService;

@@ -25,7 +25,7 @@ public class NewsApplication extends Application {
     }
 
     // 构建组件和注入
-    public static void buildComponentAndInject() {
+    private static void buildComponentAndInject() {
         sAppGraph = AppComponent.Initializer.init(sApplication);
     }
 }

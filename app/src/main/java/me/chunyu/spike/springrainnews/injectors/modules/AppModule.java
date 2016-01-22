@@ -1,6 +1,5 @@
 package me.chunyu.spike.springrainnews.injectors.modules;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 
