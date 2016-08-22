@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private static final String TAG = "DEBUG-WCL: " + MainActivity.class.getSimpleName();
 
     @Inject MainPresenter mMainPresenter;
+
     @Inject Context mAppContext;
 
     @Bind(R.id.toolbar) Toolbar mToolbar;

@@ -12,6 +12,7 @@ import me.chunyu.spike.springrainnews.injectors.components.AppGraph;
  */
 public class NewsApplication extends Application {
     private static NewsApplication sApplication;
+
     private static AppGraph sAppGraph;
 
     @Override public void onCreate() {
@@ -24,7 +25,7 @@ public class NewsApplication extends Application {
         return sAppGraph;
     }
 
-    // 构建组件和注入
+    // 初始化组件
     private static void buildComponentAndInject() {
         sAppGraph = AppComponent.Initializer.init(sApplication);
     }

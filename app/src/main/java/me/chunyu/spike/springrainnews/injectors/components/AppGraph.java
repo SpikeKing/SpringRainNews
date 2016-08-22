@@ -1,5 +1,6 @@
 package me.chunyu.spike.springrainnews.injectors.components;
 
+import me.chunyu.spike.springrainnews.injectors.modules.AppScope;
 import me.chunyu.spike.springrainnews.uis.activities.MainActivity;
 import me.chunyu.spike.springrainnews.uis.adapters.MainListAdapter;
 

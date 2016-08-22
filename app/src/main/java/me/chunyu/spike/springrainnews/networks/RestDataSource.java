@@ -32,42 +32,48 @@ public class RestDataSource implements Repository {
 
     @Inject
     public RestDataSource() {
-        // Log信息
+
+        // Log信息插值器
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
 
-        // 公私密匙
+        // 公共密匙插值器
         MarvelSigningInterceptor signingInterceptor = new MarvelSigningInterceptor(
                 BuildConfig.MARVEL_PUBLIC_KEY, BuildConfig.MARVEL_PRIVATE_KEY);
 
-        // OkHttp3.0的使用方式
+        // 在OkHttp3.0中添加差值器
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(signingInterceptor)
                 .addInterceptor(loggingInterceptor)
                 .build();
 
-        // 选择人物信息
+        // 返回数据反序列化的过滤处理
+        MarvelResultsDeserializer deserializer =
+                new MarvelResultsDeserializer<AvengersCharacter>();
+
+        // 定制的Gson反序列化
         Gson customGsonInstance = new GsonBuilder()
-                .registerTypeAdapter(new TypeToken<List<AvengersCharacter>>() {
+                .registerTypeAdapter(
+                        new TypeToken<List<AvengersCharacter>>() {
                         }.getType(),
-                        new MarvelResultsDeserializer<AvengersCharacter>())
+                        deserializer)
                 .create();
 
-        // 适配器
-        Retrofit marvelApiAdapter = new Retrofit.Builder()
+        // 添加Host, 添加Gson解析, 添加RxJava适配器, 添加OKHttp.
+        Retrofit retrofitAdapter = new Retrofit.Builder()
                 .baseUrl(MarvelService.END_POINT)
                 .addConverterFactory(GsonConverterFactory.create(customGsonInstance))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
                 .build();
 
-        // 服务
-        mMarvelService = marvelApiAdapter.create(MarvelService.class);
+        // mMarvelService是服务器接口, marvelApiAdapter是Retrofit对象
+        mMarvelService = retrofitAdapter.create(MarvelService.class);
     }
 
-    // 返回人物信息
     @Override
     public Observable<List<AvengersCharacter>> getCharacters(int currentOffset) {
+        // 调用接口, 返回Observable信息
         return mMarvelService.getCharacters(currentOffset);
     }
 }

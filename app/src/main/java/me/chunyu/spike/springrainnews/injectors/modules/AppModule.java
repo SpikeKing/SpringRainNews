@@ -24,20 +24,20 @@ public class AppModule {
         mApplication = application;
     }
 
-    @Provides
-    @Singleton
+    // 注入Application的Context
+    @Provides @Singleton
     protected Context provideApplication() {
         return mApplication;
     }
 
-    @Provides
-    @Singleton
+    // 注入资源
+    @Provides @Singleton
     protected Resources provideResources() {
         return mApplication.getResources();
     }
 
-    @Provides
-    @Singleton
+    // 注入REST数据源
+    @Provides @Singleton
     protected Repository provideDataRepository(RestDataSource restDataSource) {
         return restDataSource;
     }

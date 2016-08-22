@@ -31,6 +31,15 @@ public class MainPresenter implements BasePresenter {
         loadData();
     }
 
+    private void loadData() {
+        mCharactersSubscription = mRepository.getCharacters(0)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(avengersCharacters -> {
+                    mMainView.setListData(avengersCharacters);
+                });
+    }
+
     @Override public void onResume() {
 
     }
@@ -47,13 +56,6 @@ public class MainPresenter implements BasePresenter {
         mMainView = (MainView) v; // 绑定视图
     }
 
-    private void loadData() {
-        mCharactersSubscription = mRepository.getCharacters(0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(avengersCharacters -> {
-                    mMainView.setListData(avengersCharacters);
-                });
-    }
+
 
 }

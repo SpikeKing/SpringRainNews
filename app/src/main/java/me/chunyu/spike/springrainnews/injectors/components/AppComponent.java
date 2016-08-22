@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import me.chunyu.spike.springrainnews.NewsApplication;
 import me.chunyu.spike.springrainnews.injectors.modules.AppModule;
+import me.chunyu.spike.springrainnews.injectors.modules.AppScope;
 
 /**
  * App的组件
